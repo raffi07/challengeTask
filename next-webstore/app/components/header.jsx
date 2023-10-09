@@ -10,7 +10,7 @@ const header = () => {
         </Link>
       </div>
 
-      <div>
+      {/*<div>
         <input
           name=""
           data-test="search-textarea"
@@ -20,7 +20,7 @@ const header = () => {
           rows="1"
         ></input>
         <button data-test="search-submit">search</button>
-      </div>
+      </div>*/}
 
       <div className="links">
         <Link href="/login">login</Link>

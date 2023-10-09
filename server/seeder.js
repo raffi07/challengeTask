@@ -11,6 +11,8 @@ require('dotenv').config({ path: "./config/config.env" });
 const Book = require("./models/Book.js")
 const Review = require("./models/Review.js")
 const User = require("./models/User.js")
+//TODO: add cart
+const Cart = require("./models/Cart.js")
 
 // Connect to database
 let mongoUri = process.env.MONGO_URI;

@@ -36,7 +36,7 @@ const BookSchema = new mongoose.Schema(
       required: [true, "Please add a publisher"],
       maxlength: [100, "name cannot be more than 100 characters"],
     },
-    review: {
+   /* review: {
       type: String,
       default: null,
       maxlength: [500, "name cannot be more than 500 characters"],
@@ -46,7 +46,7 @@ const BookSchema = new mongoose.Schema(
       default: null,
       min: [1, "cannot rate lower than 1"],
       max: [5, "cannot rate higher than 5"],
-    },
+    },*/
     price: {
       type: Number,
       required: [true, "Please add a price"],
@@ -76,14 +76,14 @@ BookSchema.pre('deleteOne', { document: true }, async function(next) {
   next();
 });
 
-// Reverse populate with virtuals
+/*// Reverse populate with virtuals
 BookSchema.virtual("reviews", {
   ref: "Review",
   localField: "_id",
   // referencing the review model foreign field
   foreignField: "book",
   justOne: false,
-});
+});*/
 
 const Book = mongoose.model("Book", BookSchema);
 module.exports = Book;

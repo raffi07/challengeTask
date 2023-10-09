@@ -5,7 +5,7 @@ import BookCards from "./components/bookCards";
 const HomePage = () => {
   return (
     <div className="columns">
-      <BookFilter />
+{/*      <BookFilter />*/}
       <BookCards />
     </div>
   );

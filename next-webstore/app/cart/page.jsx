@@ -4,8 +4,35 @@ import CartInventory from "../components/cartInventory";
 import CartCheckout from "../components/cartCheckout";
 import styles from "../styles/cart.module.css";
 
-const CartPage = () => {
-  const cartItems = [
+const CartPage =  () => {
+
+    const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+    };
+    const token = getCookie("token");
+
+    console.log(token, "token");
+
+  const [cartItems, setCartItems] = useState([])
+
+  useEffect( () => {
+    const items =  fetch(
+        `/api/v1/cart`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+    setCartItems(items);
+  }, []);
+    //TODO: show real cart items
+
+
+  /* = [
     {
       id: 1,
       author: "Author 1",
@@ -30,23 +57,23 @@ const CartPage = () => {
       price: 20.0,
       quantity: 3,
     },
-  ];
+  ];*/
 
   return (
-    <div className={styles.columns}>
-      <CartInventory items={cartItems} />
-      <CartCheckout
-        firstName="John"
-        lastName="Doe"
-        address="123 Main St"
-        city="Anytown"
-        state="CA"
-        zipCode="12345"
-        cardNumber="1234 5678 9012 3456"
-        cardExpiration="01/23"
-        cardCVV="123"
-      ></CartCheckout>
-    </div>
+      <div className={styles.columns}>
+        <CartInventory items={cartItems}/>
+        <CartCheckout
+            firstName="John"
+            lastName="Doe"
+            address="123 Main St"
+            city="Anytown"
+            state="CA"
+            zipCode="12345"
+            cardNumber="1234 5678 9012 3456"
+            cardExpiration="01/23"
+            cardCVV="123"
+        ></CartCheckout>
+      </div>
   );
 };
 

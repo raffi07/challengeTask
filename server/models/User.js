@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const Cart = require("./Cart");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -33,7 +34,8 @@ const UserSchema = new mongoose.Schema(
       default: "user",
     },
     createdAt: { type: Date, default: Date.now },
-    reviews: [
+    cart: {type: Cart},
+    /*reviews: [
       {
         reviewId: {
           type: String,
@@ -48,7 +50,7 @@ const UserSchema = new mongoose.Schema(
           required: true,
         },
       },
-    ],
+    ],*/
   },
   // virtuals
   {

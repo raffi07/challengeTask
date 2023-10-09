@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 
 const search = () => {
   return (
@@ -16,4 +16,4 @@ const search = () => {
   );
 };
 
-export default search;
+export default search;*/

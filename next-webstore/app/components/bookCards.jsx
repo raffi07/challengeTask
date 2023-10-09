@@ -39,6 +39,36 @@ const BookCards = () => {
     setSelectedBook(book);
   };
 
+  const handleAddToCart = async (book) => {
+    try {
+      const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(";").shift();
+      };
+      const token = getCookie("token");
+
+      console.log(token, "token");
+      console.log(id, "id")
+
+      const response = await fetch(
+          `http:localhost:3000/api/v1/cart`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({cart}),
+          }
+      );
+      const data = await response.json();
+      console.log('Cart: ', data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       {!selectedBook && (
@@ -69,12 +99,12 @@ const BookCards = () => {
                   <ul>
                     <li> Author: {book.author}</li>
                     <li> Publisher: {book.publisher}</li>
-                    <li>Genre: {book.genre}</li>
+                    <li> Genre: {book.genre}</li>
                     <li> Price: {book.price}</li>
                   </ul>
-                  <button className="btn" data-test="add-to-cart">
+                 {/* <button className="btn" data-test="add-to-cart" onClick={() => handleAddToCart(book)}>
                     add to cart
-                  </button>
+                  </button>*/}
                 </div>
               ))}
             </>
@@ -89,7 +119,7 @@ const BookCards = () => {
           author={selectedBook.author}
           publisher={selectedBook.publisher}
           title={selectedBook.title}
-          genre={selectedBook.genre}
+          price={selectedBook.price}
         />
       )}
     </>
