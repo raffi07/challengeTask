@@ -13,11 +13,12 @@ dotenv.config({ path: "./config/config.env" });
 
 connectDB();
 
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = ["http://localhost:8080", "http://localhost:3000"];
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin || origin.includes("https://next-danube-webshop") || allowedOrigins.includes(origin)) {
       callback(null, true);
+      console.log('Origin: ',origin);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
@@ -34,9 +35,10 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-if (process.env.NODE_ENV == "development") {
-  app.use(morgan("dev"));
-}
+app.use(morgan("dev"));
+
+const NODE_ENV = process.env.NODE_ENV || "development";
+
 
 const books = require("./routes/books");
 // const reviews = require("./routes/reviews");
@@ -52,11 +54,11 @@ app.use("/api/v1/cart", cart);
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 app.listen(
   PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold)
+  console.log(`Server running in ${NODE_ENV} mode on port ${PORT}`.yellow.bold)
 );
 
 process.on("unhandledRejection", (err, promise) => {

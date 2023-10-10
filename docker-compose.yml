@@ -38,7 +38,7 @@ services:
   frontend:
     # to build an image based on Dockerfile
     # it looks in this folder to find Dockerfile to build an image
-    build: ./task_management_client
+    build: ./next-webstore
 
     # the port that we want to publish for frontend
     ports:
