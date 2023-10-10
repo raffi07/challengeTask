@@ -58,8 +58,6 @@ const createCart = asyncHandler(async (req, res, next) => {
     // Save the updated cart
     await cart.save();
 
-
-
     res
         .status(201)
         .json({ success: true, data: cart, msg: `there is a new book in your cart!` });

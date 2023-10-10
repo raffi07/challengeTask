@@ -19,9 +19,11 @@ const router = express.Router();
 // router.use("/:bookId/reviews", reviewRouter);
 
 const { protect, authorize } = require("../middleware/auth.js");
+const {getBooks} = require("../controllers/books");
 
 router
   .route("/")
+    .get(getBooks)
   .post(protect, authorize("admin"), createBook);
 
 router

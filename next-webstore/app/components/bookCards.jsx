@@ -8,7 +8,7 @@ async function fetchBooks() {
   const apiUrl =
     process.env.NEXT_PUBLIC_NODE_ENV === "production"
       ? "https://next-danube-webshop-backend.vercel.app/api/v1"
-      : "https://next-danube-webshop-backend-staging.vercel.app/api/v1";
+      : "http://localhost:3000/api/v1";
 
   try {
     console.log(apiUrl);

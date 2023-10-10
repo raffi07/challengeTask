@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
+#RUN npm run seeder --v
+#RUN npm run seeder --i
+
 EXPOSE 8080
 
-CMD ["npm","start"] // updated
+CMD ["npm","start"]

@@ -9,21 +9,21 @@ require('dotenv').config({ path: "./config/config.env" });
 
 // Load models 
 const Book = require("./models/Book.js")
-const Review = require("./models/Review.js")
+//const Review = require("./models/Review.js")
 const User = require("./models/User.js")
-//TODO: add cart
 const Cart = require("./models/Cart.js")
+const connectDB = require("./config/db");
 
 // Connect to database
 // let mongoUri = process.env.MONGO_URI;
 // if (process.env.NODE_ENV !== 'production') {
 //   mongoUri = process.env.MONGO_URI_STAGING;
 // }
-
-// mongoose.connect(mongoUri, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
+/*
+mongoose.connect(mongoUri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});*/
 
 
 // Read JSON files
@@ -33,7 +33,10 @@ const users = JSON.parse(fs.readFileSync(`${__dirname}/_data/users.json`, "utf-8
 
 // import into db
 const importData = async () => {
+  await connectDB();
+
   try {
+    console.log("start importing data");
     await Book.create(books);
     await User.create(users);
     // await Review.create(reviews);
@@ -47,7 +50,10 @@ const importData = async () => {
 
 // delete data
 const deleteData = async () => {
+  await connectDB();
+
   try {
+    console.log("start destroying data")
     await Book.deleteMany();
     await User.deleteMany();
     // await Review.deleteMany();
@@ -59,8 +65,10 @@ const deleteData = async () => {
   }
 };
 
-if (process.argv[2] === "-i") {
-  importData();
-} else if (process.argv[2] === "-v") {
+if (process.argv[2] === "--v") {
   deleteData();
+}
+
+if (process.argv[2] === "--i") {
+  importData();
 }

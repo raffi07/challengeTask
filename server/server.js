@@ -13,7 +13,10 @@ dotenv.config({ path: "./config/config.env" });
 
 connectDB();
 
-const allowedOrigins = ["http://localhost:8080", "http://localhost:3000"];
+const allowedOrigins = ["*"
+    //"http://localhost:8080", "http://localhost:3000"
+    // todo maybe add frontend:3000 and backend:8080
+];
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin || origin.includes("https://next-danube-webshop") || allowedOrigins.includes(origin)) {

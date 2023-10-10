@@ -7,7 +7,11 @@ const Book = require("../models/Book") ;
 // @route GET /api/v1/books
 // @access Public
 const getBooks = asyncHandler(async (req, res, next) => {
-  res.status(200).json(res.advancedResults);
+  const books = await Book.find();
+  if (!books) {
+    return next(new ErrorResponse(`No books found`, 404));
+  }
+  res.status(200).json({success: true, data: books});
 });
 // @desc get a book by ID
 // @route GET /api/v1/books/:id

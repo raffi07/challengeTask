@@ -2,9 +2,9 @@
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  try {
-    mongoose.connect(
-      "mongodb://host.docker.internal:27017/task-management",
+    console.log("trying to connect to mongo db")
+    await mongoose.connect(
+      "mongodb://mymongodb:27017/",
       {
         auth: {
           username: "anas",
@@ -13,16 +13,8 @@ const connectDB = async () => {
         authSource: "admin",
         useNewUrlParser: true,
         useUnifiedTopology: true,
-      })}
-    catch (err) {
-      if (err) {
-        console.error("failed to connect to mongoDB");
-        console.error(err);
-      } else {
-        console.log("mongodb is running and secured");
-        app.listen(PORT);
-      }
-    }
+      }).then(() => console.log("connection established successfully"))
+        .catch((err) => console.log("connection attempt failed:", err))
 };
 
 module.exports = connectDB;
