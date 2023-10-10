@@ -9,12 +9,13 @@ const CartSchema = new mongoose.Schema(
         _id: {
             type: String,
             default: uuidv4,
-            required: false,
+            required: true,
         },
         books:{
             type: [{
                 bookId: String,
                 quantity: Number,
+                price: Number
             }],
             default: [],
             required: false

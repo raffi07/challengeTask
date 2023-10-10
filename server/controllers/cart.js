@@ -16,46 +16,53 @@ const getCart = asyncHandler(async (req, res, next) => {
 
 
 const createCart = asyncHandler(async (req, res, next) => {
-
-    const user = await User.findById(req.user._id);
+/*
+   const user = await User.findById(req.user._id);
     if (!user) {
         return next(new ErrorResponse(`User not found with id ${req.user._id}`, 404));
     }
 
-    const book = await Book.findById(req.params.bookId);
+    const book = await Book.findById(req.body.bookId);
 
     if (!book) {
-        return next(new ErrorResponse(`Book not found with id of ${req.params.bookId}`, 404));
+        return next(new ErrorResponse(`Book not found with id of ${req.body.bookId}`, 404));
     }
+
     // Check if the user already has a cart, if not, create one
-    let cart = await Cart.findOne({ _id: user.cartId });
+     let cart = await Cart.findOne({ _id: user.cartId });
 
 
     if (!cart) {
-        cart = await Cart.create({price: 0}); // You may want to set the initial price as needed
-        user.cartId = cart._id;
-        await user.save();
-    } else {
+    */
+
+     const cart = await Cart.create({price: 0, books: [{bookId: req.body.bookId, quantity: req.body.quantity, price: req.body.price}]}); // You may want to set the initial price as needed
+        //user.cartId = cart._id;
+        //await user.save();
+    //} else {
         // Add the book to the cart
-        const existingCartItem = cart.books.find((item) => item.bookId === book._id.toString());
+        /*const existingCartItem = cart.books.find((item) => item.req.params.bookId === book._id.toString());
 
         if (existingCartItem) {
             // If the book is already in the cart, update the quantity
             existingCartItem.quantity += 1;
-        }
-    }
+        }*/
+   // }
+
     // If it's a new book, add it to the cart
-    cart.books.push({bookId: book._id, quantity: 1});
+    //cart.books.push({bookId: book._id, quantity: 1});
+
 
     // Update the cart's price as needed
-    cart.price += book.price;
+    cart.price += 2;
 
     // Save the updated cart
     await cart.save();
 
+
+
     res
         .status(201)
-        .json({ success: true, data: cart, msg: `${user.username}, there is a new book in your cart!` });
+        .json({ success: true, data: cart, msg: `there is a new book in your cart!` });
 });
 
 const updateCart = asyncHandler(async (req, res, next) => {
