@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Cart = require("./Cart");
+const Cart = require("./Cart").schema;
 
 const UserSchema = new mongoose.Schema(
   {

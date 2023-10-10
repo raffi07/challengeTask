@@ -2,17 +2,27 @@
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  let mongoUri = process.env.MONGO_URI;
-
-  if (process.env.NODE_ENV !== 'production') {
-    mongoUri = process.env.MONGO_URI_STAGING;
-  }
-
-  const conn = await mongoose.connect(mongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  console.log(`mongoDB connected ${conn.connection.host}`.green.bold.inverse);
+  try {
+    mongoose.connect(
+      "mongodb://host.docker.internal:27017/task-management",
+      {
+        auth: {
+          username: "anas",
+          password: "12345",
+        },
+        authSource: "admin",
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      })}
+    catch (err) {
+      if (err) {
+        console.error("failed to connect to mongoDB");
+        console.error(err);
+      } else {
+        console.log("mongodb is running and secured");
+        app.listen(PORT);
+      }
+    }
 };
 
 module.exports = connectDB;
