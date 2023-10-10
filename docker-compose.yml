@@ -44,8 +44,8 @@ services:
     ports:
       - "3000:3000"
     # add bind mount volume to keep have updated source code
-    volumes:
-      - ./task_management_client/src:/app/src
+    # volumes:
+    #   - ./task_management_client/src:/app/src
     # allow interactive mode
     stdin_open: true
     tty: true
