@@ -3,7 +3,7 @@ const express = require("express");
 const Book = require("../models/Book.js");
 const {
   getBook,
-  // getBooks,
+  getBooks,
   createBook,
   updateBook,
   deleteBook,
@@ -19,11 +19,10 @@ const router = express.Router();
 // router.use("/:bookId/reviews", reviewRouter);
 
 const { protect, authorize } = require("../middleware/auth.js");
-const {getBooks} = require("../controllers/books");
 
 router
   .route("/")
-    .get(getBooks)
+  .get(getBooks)
   .post(protect, authorize("admin"), createBook);
 
 router

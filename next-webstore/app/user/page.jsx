@@ -14,7 +14,7 @@ const UserPage = () => {
       const apiUrl =
         process.env.NEXT_PUBLIC_NODE_ENV === "production"
           ? "https://next-danube-webshop-backend.vercel.app/api/v1"
-          : "https://next-danube-webshop-backend-staging.vercel.app/api/v1";
+          : "http://localhost:3000/api/v1";
 
       try {
         // Get token from cookies
@@ -26,7 +26,7 @@ const UserPage = () => {
         const token = getCookie("token");
 
         // Fetch user data with token in headers
-        const response = await fetch(`${apiUrl}auth/me`, {
+        const response = await fetch(`${apiUrl}/auth/me`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

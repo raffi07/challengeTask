@@ -8,8 +8,8 @@ RUN npm install
 
 COPY . .
 
-#RUN npm run seeder --v
-#RUN npm run seeder --i
+RUN node seeder.js --v
+RUN node seeder.js --i
 
 EXPOSE 8080
 
