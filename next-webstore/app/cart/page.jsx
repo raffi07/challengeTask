@@ -6,58 +6,45 @@ import styles from "../styles/cart.module.css";
 
 const CartPage =  () => {
 
-    /* const getCookie = (name) => {
-         const value = `; ${document.cookie}`;
-         const parts = value.split(`; ${name}=`);
-         if (parts.length === 2) return parts.pop().split(";").shift();
-     };
-     const token = getCookie("token");
-
-     console.log(token, "token");*/
-
     const [cartItems, setCartItems] = useState([])
 
     useEffect( () => {
-        try{
-            const items =  fetch(
-                `/api/v1/cart`,
+        const fetchData = async () => {
+            const apiUrl =
+                process.env.NEXT_PUBLIC_NODE_ENV === "production"
+                    ? "https://next-danube-webshop-backend.vercel.app/api/v1"
+                    : "http://localhost:3000/api/v1";
+            try{
+                const getCookie = (name) => {
+                    const value = `; ${document.cookie}`;
+                    const parts = value.split(`; ${name}=`);
+                    if (parts.length === 2) return parts.pop().split(";").shift();
+                };
+                const token = getCookie("token");
+                console.log(token, "token");
+
+                const response = await  fetch(
+                `${apiUrl}/api/v1/cart`,
                 {
                     method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 });
-            setCartItems(items);
+                if (response.ok) {
+                    const items = await response.json();
+                    console.log(items);
+                    setCartItems(items);
+                }else{
+                    console.log("Error: ", error)
+                }
         }catch (e){
             console.log(e);
         }
+        }
+        fetchData();
     }, []);
-    //TODO: show real cart items
 
-
-    /* = [
-      {
-        id: 1,
-        author: "Author 1",
-        publisher: "Publisher 1",
-        genre: "Genre 1",
-        price: 10.0,
-        quantity: 2,
-      },
-      {
-        id: 2,
-        author: "Author 2",
-        publisher: "Publisher 2",
-        genre: "Genre 2",
-        price: 15.0,
-        quantity: 1,
-      },
-      {
-        id: 3,
-        author: "Author 3",
-        publisher: "Publisher 3",
-        genre: "Genre 3",
-        price: 20.0,
-        quantity: 3,
-      },
-    ];*/
 
     return (
         <div className={styles.columns}>

@@ -2,20 +2,28 @@
 const ErrorResponse = require("../utils/errorResponse") ;
 const asyncHandler = require("../middleware/async") ;
 const User = require("../models/User") ;
-
+const {MongooseError} = require("mongoose");
 // @desc REGISTER USER
 // @route POST /api/v1/auth/register
 // @access Public
 const register = asyncHandler(async (req, res, next) => {
   const { username, email, password, role } = req.body;
 
-  // Create user
-  const user = await User.create({
-    username,
-    email,
-    password,
-    role,
-  });
+  let user;
+  try {
+    // Create user
+     user = await User.create({
+      username,
+      email,
+      password,
+      role,
+    });
+  }catch(e){
+    console.log(e);
+    return next(new ErrorResponse ("Something went wrong when creating the user.", 400))
+  }
+
+  console.log("User: ",user);
 
   sendTokenResponse(user, 200, res);
 });
@@ -35,7 +43,7 @@ const login = asyncHandler(async (req, res, next) => {
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) {
-    return next(new ErrorResponse("invalid credentials", 401));
+    return next(new ErrorResponse(MongooseError.toString(), 401));
   }
 
   // check if password matches
@@ -54,7 +62,8 @@ const sendTokenResponse = (user, statusCode, res) => {
 
   const options = {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
-    httpOnly: true,
+    //If cookie should be accessible by frontend, the httpOnly must be false, because it runs in a different port
+    httpOnly: false,
   };
 
   res.status(statusCode).cookie("token", token, options).json({ success: true, token });
@@ -65,6 +74,12 @@ const sendTokenResponse = (user, statusCode, res) => {
 // @access Public
 const getMe = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user._id);
+
+  if(!user){
+    return new ErrorResponse(
+        "Please log in to see your profile", 401
+    )
+  }
 
   res.status(200).json({
     success: true,

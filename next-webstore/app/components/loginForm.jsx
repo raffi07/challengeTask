@@ -39,7 +39,6 @@ const LoginForm = () => {
         // Set cookie with the token and expiration time
         const expires = new Date(Date.now() + data.expiresIn * 1000); // expiresIn is the token expiration time in seconds
         document.cookie = `token=${data.token};expires=${expires.toUTCString()};path=/`;
-
         setTimeout(() => {
           setMessage("");
         }, 5000);

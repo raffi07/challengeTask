@@ -35,22 +35,6 @@ const UserSchema = new mongoose.Schema(
     },
     createdAt: { type: Date, default: Date.now },
     cart: {type: Cart},
-    /*reviews: [
-      {
-        reviewId: {
-          type: String,
-          ref: "Review",
-          default: uuidv4,
-          required: true,
-        },
-        bookId: {
-          type: String,
-          ref: "Book",
-          default: uuidv4,
-          required: true,
-        },
-      },
-    ],*/
   },
   // virtuals
   {

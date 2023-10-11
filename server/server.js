@@ -9,7 +9,7 @@ const cors = require("cors");
 
 colors;
 
-dotenv.config({ path: "./config/config.env" });
+dotenv.config();
 
 connectDB();
 
