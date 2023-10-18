@@ -24,7 +24,7 @@ const CartPage =  () => {
                 console.log(token, "token");
 
                 const response = await  fetch(
-                `${apiUrl}/api/v1/cart`,
+                `${apiUrl}/cart`,
                 {
                     method: "GET",
                     headers: {
@@ -49,17 +49,7 @@ const CartPage =  () => {
     return (
         <div className={styles.columns}>
             <CartInventory items={cartItems}/>
-            <CartCheckout
-                firstName="John"
-                lastName="Doe"
-                address="123 Main St"
-                city="Anytown"
-                state="CA"
-                zipCode="12345"
-                cardNumber="1234 5678 9012 3456"
-                cardExpiration="01/23"
-                cardCVV="123"
-            ></CartCheckout>
+            <CartCheckout/>
         </div>
     );
 };
