@@ -30,7 +30,7 @@ const UserProfile = ({ userData }) => {
       console.log(formValues, "formValues");
 
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_ENV_URL}/users/${id}`,
+        `http://localhost:3000/api/v1/users/${id}`,
         {
           method: "PUT",
           headers: {
