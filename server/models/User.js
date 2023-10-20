@@ -4,6 +4,8 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Cart = require("./Cart").schema;
+const ShippingAddress = require("./ShippingAddress").schema;
+const PaymentMethod = require("./PaymentMethod").schema;
 
 const UserSchema = new mongoose.Schema(
   {
@@ -34,7 +36,9 @@ const UserSchema = new mongoose.Schema(
       default: "user",
     },
     createdAt: { type: Date, default: Date.now },
-    cart: {type: Cart},
+    cartId: {type: String},
+    shippingAddress:{ type: ShippingAddress, ref: "ShippingAddress"},
+    paymentMethod:{ type: PaymentMethod, ref: "PaymentMethod"}
   },
   // virtuals
   {
@@ -64,6 +68,21 @@ UserSchema.virtual("populatedReviews", {
   ref: "Review",
   localField: "_id",
   foreignField: "review",
+  justOne: false,
+});
+// Define a virtual property for populating address
+UserSchema.virtual("populatedAddress", {
+  ref: "ShippingAddress",
+  localField: "_id",
+  foreignField: "shippingAddress",
+  justOne: false,
+});
+
+// Define a virtual property for populating paymentmethod
+UserSchema.virtual("populatedPaymentMethod", {
+  ref: "PaymentMethod",
+  localField: "_id",
+  foreignField: "paymentMethod",
   justOne: false,
 });
 
