@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import BookCards from "../components/bookCards";
 import UserPhoto from "../components/userPhoto";
 import UserProfile from "../components/userProfile";
 

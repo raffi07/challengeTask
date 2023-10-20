@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const colors = require("colors");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./middleware/error");
+const session = require('./session');
 const connectDB = require("./config/db");
 const cors = require("cors");
 
@@ -32,6 +33,17 @@ const corsOptions = {
 
 const app = express();
 
+app.get('/', (req, res) => {
+  const sessionToken = session.generateSessionToken();
+
+  console.log("TOKEN: ", sessionToken);
+
+  // Set the session token as a cookie in the response
+  res.cookie('sessionToken', sessionToken);
+
+  res.send('Welcome to the site!');
+});
+
 app.use(cors(corsOptions));
 
 app.use(express.json());
@@ -50,7 +62,6 @@ const auth = require("./routes/auth");
 const cart = require("./routes/cart")
 
 app.use("/api/v1/books", books);
-// app.use("/api/v1/reviews", reviews);
 app.use("/api/v1/users", users);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/cart", cart);

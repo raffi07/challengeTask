@@ -22,11 +22,35 @@ async function fetchBooks() {
   }
 }
 
+//TODO: create session
+async function createSession() {
+  const apiUrl =
+      process.env.NEXT_PUBLIC_NODE_ENV === "production"
+          ? "https://next-danube-webshop-backend.vercel.app/api/v1"
+          : "http://localhost:3000/api/v1";
+
+  try {
+    console.log(apiUrl);
+    const response = await fetch(`${apiUrl}/`, {
+      method: "GET",
+    });
+    const data = await response.json();
+    //Set sessionKey and expiration time
+    const expires = new Date(Date.now() + data.expiresIn * 1000); // expiresIn is the token expiration time in seconds
+    document.cookie = `sessionKey=${data.token};expires=${expires.toUTCString()};path=/`;
+
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
 const BookCards = () => {
   const [books, setBooks] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
 
   useEffect(() => {
+    createSession();
     async function getBooks() {
       const fetchedBooks = await fetchBooks();
       setBooks(fetchedBooks);
@@ -34,6 +58,8 @@ const BookCards = () => {
 
     getBooks();
   }, []);
+
+
 
   const handleBookClick = (book) => {
     setSelectedBook(book);

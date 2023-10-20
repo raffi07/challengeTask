@@ -3,22 +3,22 @@ import React, { useState } from "react";
 import {handleNotFoundResponse} from "next/dist/server/future/route-modules/helpers/response-handlers";
 
 const bookProfile = ({ author, title, publisher, id , price}) => {
-    /*const [selectedFile, setSelectedFile] = useState(null);
-
-    function handleFileUpload(event) {
-      setSelectedFile(event.target.files[0]);
-    }*/
 
     const handleSubmit = async() =>  {
         //TODO: add "add to cart" button
-        /*event.preventDefault(); // prevent the default form submission
-        const title = event.target.elements.title.value;
-        const rating = event.target.elements.rating.value;
-        const recommend = event.target.elements.recommend.value;
-        const description = event.target.elements.description.value;*/
+
         try {
-            console.log(id, "id");
-            // const userId ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMzVjZWU1LTQ5OTgtNDNmMC1hMmQzLTZjYTlhZTNhMTVkYiIsImlhdCI6MTY5Njc2NzE4OCwiZXhwIjoxNjk5MzU5MTg4fQ.DYztFZufkbdD2V9jmT3lKDh4XKD2Z2J7NOvEccJC84E"
+            console.log(id, "bookId");
+
+            const getCookie = (name) => {
+                const value = `; ${document.cookie}`;
+                console.log(token, "value");
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(";").shift();
+            };
+            const token = getCookie("token");
+
+            console.log(token, "token");
 
             const response = await fetch(
                 `/api/v1/cart`,

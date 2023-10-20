@@ -9,9 +9,23 @@ const getCart = asyncHandler(async (req, res, next) => {
     if (!user) {
         return next(new ErrorResponse(`User not found with id of ${req.user._id}`, 404));
     }
-    const cart = await Cart.findOne({user: req.user._id});
+    console.log("user: ", user);
 
-    res.status(200).json({ success: true, data: cart })
+    let cartId;
+    if(user.cart !== null || user.cart !== undefined){
+        cartId = user.cart._id;
+        console.log("Cart ID: ", cartId);
+
+        //TODO: check if the user has a cart id -> whether there has been a cart created and then search cart by CartId
+        const cart = await Cart.findOne({_id: cartId});
+        console.log("Cart: ", cart);
+
+
+        res.status(200).json({ success: true, data: cart });
+    }
+    else res.status(400).json({ success: false});
+
+
 })
 
 
@@ -35,7 +49,34 @@ const createCart = asyncHandler(async (req, res, next) => {
     if (!cart) {
     */
 
-     const cart = await Cart.create({price: 0, books: [{bookId: req.body.bookId, quantity: req.body.quantity, price: req.body.price}]}); // You may want to set the initial price as needed
+    const sessionToken = req.cookie.sessionToken;
+
+    let cart;
+
+    if(sessionToken){
+        console.log("sessionToken: ",sessionToken);
+       //const cartData = session.getCart(sessionToken)
+        cart = await Cart.create({
+            price: 0,
+            books: [{
+                bookId: req.body.bookId,
+                quantity: req.body.quantity,
+                price: req.body.price,
+                token: sessionToken
+            }]});
+    }else {
+
+        cart = await Cart.create({
+            price: 0,
+            books: [{
+                bookId: req.body.bookId,
+                quantity: req.body.quantity,
+                price: req.body.price,
+                token: "abcdefghik"
+            }]
+        });
+    }
+     // You may want to set the initial price as needed
         //user.cartId = cart._id;
         //await user.save();
     //} else {

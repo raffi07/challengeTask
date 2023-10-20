@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const { v4: uuidv4 } = require("uuid");
 
 
-//TODO: check if it works
 const CartSchema = new mongoose.Schema(
     {
         _id: {
@@ -28,6 +27,9 @@ const CartSchema = new mongoose.Schema(
             type: Date,
             default: Date.now,
         },
+        token: {
+            type: String
+        }
     },
 );
 
