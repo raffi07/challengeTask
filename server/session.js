@@ -1,4 +1,9 @@
 const uuid = require('uuid');
-const generateSessionToken = () => {
+
+function generateSessionToken() {
     return uuid.v4(); // Generates a random UUID
 }
+
+module.exports = {
+    generateSessionToken,
+};

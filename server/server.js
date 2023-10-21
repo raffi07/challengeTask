@@ -32,16 +32,13 @@ const corsOptions = {
 }
 
 const app = express();
-
-app.get('/', (req, res) => {
+app.get('/api/v1', (req, res) => {
   const sessionToken = session.generateSessionToken();
 
-  console.log("TOKEN: ", sessionToken);
-
   // Set the session token as a cookie in the response
-  res.cookie('sessionToken', sessionToken);
+  res.cookie('sessionKey', sessionToken);
 
-  res.send('Welcome to the site!');
+  res.status(200).json({success: true, token: sessionToken});
 });
 
 app.use(cors(corsOptions));

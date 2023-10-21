@@ -49,33 +49,17 @@ const createCart = asyncHandler(async (req, res, next) => {
     if (!cart) {
     */
 
-    const sessionToken = req.cookie.sessionToken;
 
-    let cart;
+   //const cartData = session.getCart(sessionToken)
+    cart = await Cart.create({
+        price: 0,
+        books: [{
+            bookId: req.body.bookId,
+            quantity: req.body.quantity,
+            price: req.body.price,
+            token: req.body.token
+        }]});
 
-    if(sessionToken){
-        console.log("sessionToken: ",sessionToken);
-       //const cartData = session.getCart(sessionToken)
-        cart = await Cart.create({
-            price: 0,
-            books: [{
-                bookId: req.body.bookId,
-                quantity: req.body.quantity,
-                price: req.body.price,
-                token: sessionToken
-            }]});
-    }else {
-
-        cart = await Cart.create({
-            price: 0,
-            books: [{
-                bookId: req.body.bookId,
-                quantity: req.body.quantity,
-                price: req.body.price,
-                token: "abcdefghik"
-            }]
-        });
-    }
      // You may want to set the initial price as needed
         //user.cartId = cart._id;
         //await user.save();
