@@ -42,6 +42,11 @@ const createBook = asyncHandler(async (req, res, next) => {
 // @route UPDATE /api/v1/books
 // @access Public
 const updateBook = asyncHandler(async (req, res, next) => {
+
+  if (req.user.role !== "admin") {
+    return next(new ErrorResponse(`The logged in user doesn't not have permissions`, 400));
+  }
+
   const book = await Book.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
