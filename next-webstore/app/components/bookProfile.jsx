@@ -1,10 +1,12 @@
 "use client";
 import React, {useEffect, useState} from "react";
-import {handleNotFoundResponse} from "next/dist/server/future/route-modules/helpers/response-handlers";
+import { useRouter } from "next/navigation";
 
 const bookProfile = ({ author, title, publisher, id , price}) => {
 
     const [sessionCreated, setSessionCreated] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const router = useRouter();
 
     const getCookie = (name) => {
         const value = `; ${document.cookie}`;
@@ -71,9 +73,14 @@ const bookProfile = ({ author, title, publisher, id , price}) => {
             );
             const data = await response.json();
             console.log('Cart: ',data);
+            setSuccess(true);
         } catch (error) {
             console.log(error);
         }
+    }
+
+    function goToCart()  {
+        router.push("/cart");
     }
 
     return (
@@ -91,16 +98,29 @@ const bookProfile = ({ author, title, publisher, id , price}) => {
 
             <div className="right-column-expanded">
                 <form className="card-expanded" key={id}>
-                    <h1>Book</h1>
-                    <div className="form-group">
-                        <h3>Title: {title}</h3>
-                        <h3>Author: {author}</h3>
-                        <h3>Publisher: {publisher}</h3>
-                        <h3>Price: {price}</h3>
-                    </div>
-                    <button type="button" className="btn btn-primary" onClick={handleSubmit}>
-                        Add to cart
-                    </button>
+                    {success? (
+                        <>
+                            <h1>The book has been added to your cart.</h1>
+                            <button type="button" className="btn btn-primary" onClick={goToCart}>
+                                Go to cart
+                            </button>
+                        </>
+                        ) : (
+                        <>
+                            <h1>Book</h1>
+                            <div className="form-group">
+                                <h3>Title: {title}</h3>
+                                <h3>Author: {author}</h3>
+                                <h3>Publisher: {publisher}</h3>
+                                <h3>Price: {price}</h3>
+                            </div>
+                            <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                                Add to cart
+                            </button>
+                        </>
+                        )
+                    }
+
                 </form>
             </div>
         </div>

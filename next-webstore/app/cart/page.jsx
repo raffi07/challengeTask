@@ -15,29 +15,24 @@ const CartPage =  () => {
                     ? "https://next-danube-webshop-backend.vercel.app/api/v1"
                     : "http://localhost:3000/api/v1";
             try{
+                //not needed anymore...
                 const getCookie = (name) => {
                     const value = `; ${document.cookie}`;
                     const parts = value.split(`; ${name}=`);
                     if (parts.length === 2) return parts.pop().split(";").shift();
                 };
-                const token = getCookie("token");
+                const token = getCookie("sessionKey");
                 console.log(token, "token");
 
                 const response = await  fetch(
                 `${apiUrl}/cart`,
                 {
                     method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
                 });
-                if (response.ok) {
-                    const items = await response.json();
-                    console.log(items);
-                    setCartItems(items);
-                }else{
-                    console.log("Error: ", error)
-                }
+                const items = await response.json();
+                console.log("ITEMS: ", items);
+                console.log("books: ", items.data.books);
+                setCartItems(items);
         }catch (e){
             console.log(e);
         }

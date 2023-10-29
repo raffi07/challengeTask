@@ -7,6 +7,7 @@ const errorHandler = require("./middleware/error");
 const session = require('./session');
 const connectDB = require("./config/db");
 const cors = require("cors");
+const {createUnauthorizedUser} = require("./controllers/unauthorizedUser")
 
 colors;
 
@@ -22,7 +23,6 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (!origin || origin.includes("https://next-danube-webshop") || allowedOrigins.includes(origin)) {
       callback(null, true);
-      console.log('Origin: ',origin);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
@@ -32,11 +32,19 @@ const corsOptions = {
 }
 
 const app = express();
-app.get('/api/v1', (req, res) => {
+app.get('/api/v1', async (req, res) => {
   const sessionToken = session.generateSessionToken();
 
   // Set the session token as a cookie in the response
   res.cookie('sessionKey', sessionToken);
+  try {
+    const unauthorizedUser = await createUnauthorizedUser(sessionToken);
+    console.log("Created unauthorized user with id: ", sessionToken);
+    //TODO: save unauthorized User correctly
+    await unauthorizedUser.save();
+  } catch (e) {
+    console.log("Not able to create unauthorized user: ", e);
+  }
 
   res.status(200).json({success: true, token: sessionToken});
 });

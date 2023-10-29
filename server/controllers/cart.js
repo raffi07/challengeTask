@@ -1,40 +1,39 @@
 const Cart = require("../models/Cart.js") ;
 const User = require("../models/User.js") ;
+const UnauthorizedUser = require("../models/UnauthorizedUser.js") ;
 const Book = require("../models/Book.js") ;
 const ErrorResponse = require("../utils/errorResponse.js") ;
 const asyncHandler = require("../middleware/async.js") ;
 
 const getCart = asyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.user._id);
-    if (!user) {
-        return next(new ErrorResponse(`User not found with id of ${req.user._id}`, 404));
+    try{
+    const unauthorizedUser = await UnauthorizedUser.findById(req.cookies.sessionKey);
+    if (!unauthorizedUser) {
+        return next(new ErrorResponse(`UnauthorizedUser not found with id of ${req.user._id}`, 404));
     }
-    console.log("user: ", user);
-
-    let cartId;
-    if(user.cart !== null || user.cart !== undefined){
-        cartId = user.cart._id;
-        console.log("Cart ID: ", cartId);
-
-        //TODO: check if the user has a cart id -> whether there has been a cart created and then search cart by CartId
-        const cart = await Cart.findOne({_id: cartId});
+    if(unauthorizedUser.cartId !== nulls) {
+        const cart = await Cart.findById(unauthorizedUser.cartId);
         console.log("Cart: ", cart);
-
-
+        //TODO: return books with author, title etc.
         res.status(200).json({ success: true, data: cart });
     }
-    else res.status(400).json({ success: false});
-
-
+    }catch (e){
+        console.log("Error finding unauthorized user: ", e);$
+        res.status(400).json({ success: false});
+    }
 })
 
 
 const createCart = asyncHandler(async (req, res, next) => {
-/*
-   const user = await User.findById(req.user._id);
-    if (!user) {
-        return next(new ErrorResponse(`User not found with id ${req.user._id}`, 404));
+    console.log("T:", req.body.token);
+    let cart;
+    const unauthorizedUser = await UnauthorizedUser.findById(req.body.token);
+    console.log(("Unauth User: ", unauthorizedUser));
+    if(!unauthorizedUser){
+        return next(new ErrorResponse(`Session was not established`, 404));
     }
+    cart = await Cart.findById(unauthorizedUser.cartId);
+    console.log("cart: ", cart);
 
     const book = await Book.findById(req.body.bookId);
 
@@ -42,13 +41,7 @@ const createCart = asyncHandler(async (req, res, next) => {
         return next(new ErrorResponse(`Book not found with id of ${req.body.bookId}`, 404));
     }
 
-    // Check if the user already has a cart, if not, create one
-     let cart = await Cart.findOne({ _id: user.cartId });
-
-
     if (!cart) {
-    */
-
 
    //const cartData = session.getCart(sessionToken)
     cart = await Cart.create({
@@ -57,12 +50,11 @@ const createCart = asyncHandler(async (req, res, next) => {
             bookId: req.body.bookId,
             quantity: req.body.quantity,
             price: req.body.price,
-            token: req.body.token
-        }]});
+        }],
+        token: req.body.token
+    });}
 
-     // You may want to set the initial price as needed
-        //user.cartId = cart._id;
-        //await user.save();
+    //TODO: add the logic if the cart exists already
     //} else {
         // Add the book to the cart
         /*const existingCartItem = cart.books.find((item) => item.req.params.bookId === book._id.toString());
@@ -77,11 +69,21 @@ const createCart = asyncHandler(async (req, res, next) => {
     //cart.books.push({bookId: book._id, quantity: 1});
 
 
-    // Update the cart's price as needed
+    // TODO: Update the cart's custom price
     cart.price += 2;
 
     // Save the updated cart
     await cart.save();
+
+    /*if(user){
+        // You may want to set the initial price as needed
+        user.cartId = cart._id;
+        await user.save();
+    }else*/ if(unauthorizedUser){
+        unauthorizedUser.cartId = cart._id;
+        await unauthorizedUser.save();
+        console.log("updated unauth user: ", unauthorizedUser);
+    }
 
     res
         .status(201)
