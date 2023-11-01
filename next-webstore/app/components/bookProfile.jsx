@@ -54,18 +54,11 @@ const bookProfile = ({ author, title, publisher, id , price}) => {
         }
 
         try {
-            const getCookie = (name) => {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return parts.pop().split(";").shift();
-            };
-            const token = getCookie("sessionKey");
-
             const response = await fetch(
                 `/api/v1/cart`,
                 {
                     method: "POST",
-                    body: JSON.stringify({ bookId: id , quantity: 1, price: 2, token: token}),
+                    body: JSON.stringify({ bookId: id , quantity: 1}),
                     headers: {
                         "Content-Type": "application/json",
                     },

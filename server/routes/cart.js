@@ -1,4 +1,4 @@
-const {getCart, createCart, updateCart, deleteCart} = require("../controllers/cart");
+const {getCart, deleteCart, createOrUpdateCart} = require("../controllers/cart");
 const {protect, authorize} = require("../middleware/auth");
 const express = require("express");
 const router = express.Router();
@@ -7,8 +7,7 @@ const router = express.Router();
 router
     .route("/")
     .get(getCart)
-    .post(createCart)
-    .put(protect, authorize("user", "admin"), updateCart)
+    .post(createOrUpdateCart)
     .delete(protect, authorize("user", "admin"), deleteCart);
 
 module.exports = router;

@@ -7,6 +7,7 @@ import styles from "../styles/cart.module.css";
 const CartPage =  () => {
 
     const [cartItems, setCartItems] = useState([])
+    const [totalPrice, setTotalPrice] = useState(0)
 
     useEffect( () => {
         const fetchData = async () => {
@@ -15,14 +16,6 @@ const CartPage =  () => {
                     ? "https://next-danube-webshop-backend.vercel.app/api/v1"
                     : "http://localhost:3000/api/v1";
             try{
-                //not needed anymore...
-                const getCookie = (name) => {
-                    const value = `; ${document.cookie}`;
-                    const parts = value.split(`; ${name}=`);
-                    if (parts.length === 2) return parts.pop().split(";").shift();
-                };
-                const token = getCookie("sessionKey");
-                console.log(token, "token");
 
                 const response = await  fetch(
                 `${apiUrl}/cart`,
@@ -30,9 +23,8 @@ const CartPage =  () => {
                     method: "GET",
                 });
                 const items = await response.json();
-                console.log("ITEMS: ", items);
-                console.log("books: ", items.data.books);
-                setCartItems(items);
+                setCartItems(items.data.books);
+                setTotalPrice(items.data.price);
         }catch (e){
             console.log(e);
         }
@@ -43,7 +35,7 @@ const CartPage =  () => {
 
     return (
         <div className={styles.columns}>
-            <CartInventory items={cartItems}/>
+            <CartInventory items={cartItems} totalPrice={totalPrice}/>
             <CartCheckout/>
         </div>
     );
