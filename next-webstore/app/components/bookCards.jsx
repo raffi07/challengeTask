@@ -11,7 +11,6 @@ async function fetchBooks() {
       : "http://localhost:3000/api/v1";
 
   try {
-    console.log(apiUrl);
     const response = await fetch(`${apiUrl}/books`);
     const responseJSON = await response.json();
     const books = await responseJSON.data;
@@ -21,59 +20,64 @@ async function fetchBooks() {
     return null;
   }
 }
-
 const BookCards = () => {
-  const [books, setBooks] = useState(null);
+  const [query, setQuery] = useState('');
+  const [books, setBooks] = useState([]);
+  const [success, setSuccess] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
 
   useEffect(() => {
     async function getBooks() {
-      const fetchedBooks = await fetchBooks();
-      setBooks(fetchedBooks);
+        const fetchedBooks = await fetchBooks();
+        setBooks(fetchedBooks);
     }
-
     getBooks();
   }, []);
 
 
+  async function submitSearch(){
+    const apiUrl =
+        process.env.NEXT_PUBLIC_NODE_ENV === "production"
+            ? "https://next-danube-webshop-backend.vercel.app/api/v1"
+            : "http://localhost:3000/api/v1";
 
-  const handleBookClick = (book) => {
-    setSelectedBook(book);
-  };
+    const encodedQuery = encodeURIComponent(query);
 
-  const handleAddToCart = async (book) => {
     try {
-      const getCookie = (name) => {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(";").shift();
-      };
-      const token = getCookie("token");
-
-      console.log(token, "token");
-      console.log(id, "id")
-
       const response = await fetch(
-          `http:localhost:3000/api/v1/cart`,
+          `${apiUrl}/books/search?query=${encodedQuery}`,
           {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({cart}),
+            method: "GET",
           }
       );
       const data = await response.json();
-      console.log('Cart: ', data);
+      setBooks(data);
+      setSuccess(true);
     } catch (error) {
       console.log(error);
     }
   }
 
+  const handleBookClick = (book) => {
+    setSelectedBook(book);
+  };
+
   return (
     <>
       {!selectedBook && (
+          <div className="rows">
+        <div>
+            <input
+                name=""
+                data-test="search-textarea"
+                value={query}
+                id="search-textarea"
+                cols="30"
+                rows="1"
+                onChange={(event) => setQuery(event.target.value)}
+            />
+            <button data-test="search-submit" onClick={submitSearch}>search</button>
+        </div>
         <div className="right-column">
           {books ? (
             <>
@@ -114,6 +118,7 @@ const BookCards = () => {
             <h1>LOADING</h1>
           )}
         </div>
+          </div>
       )}
       {selectedBook && (
         <BookProfile

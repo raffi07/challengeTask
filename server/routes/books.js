@@ -7,6 +7,7 @@ const {
   createBook,
   updateBook,
   deleteBook,
+  searchBook
 } = require("../controllers/books.js");
 // const advancedResults = require("../middleware/advancedResults.js");
 
@@ -24,6 +25,10 @@ router
   .route("/")
   .get(getBooks)
   .post(protect, authorize("admin"), createBook);
+
+router
+  .route("/search")
+  .get(searchBook)
 
 router
   .route("/:id")

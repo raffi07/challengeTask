@@ -78,10 +78,32 @@ const deleteBook = asyncHandler(async (req, res, next) => {
   res.status(200).json({});
 });
 
+const searchBook = asyncHandler(async (req, res, next)=> {
+  const searchTerm = req.query.query; // Assuming the search term is in req.title
+
+  // Create a query object to search by title or author
+  const query = {
+    $or: [
+      { title: { $regex: searchTerm, $options: 'i' } }, // Case-insensitive search for title
+      { author: { $regex: searchTerm, $options: 'i' } }, // Case-insensitive search for author
+    ],
+  };
+
+  const books = await Book.find(query);
+
+  if (!books || books.length === 0) {
+    return next(new ErrorResponse(`No books found with the searched term: ${searchTerm}`, 404));
+  }
+
+  // Handle the case where books are found
+  res.status(200).json(books);
+});
+
 
 module.exports = {
   getBooks,
   getBook,
+  searchBook,
   createBook,
   updateBook,
   deleteBook,

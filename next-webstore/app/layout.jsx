@@ -10,7 +10,7 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: "Checkly Webshop",
+  title: "Impenetrable Webshop",
   description:
     "This is a web application meant for using with combining with your Checkly account to discover how easy it is to create API & Browser checks with the Checkly npm package!",
 };
