@@ -89,11 +89,11 @@ const UserProfile = ({ userData }) => {
               <p>Date Joined: {userData.data.createdAt}</p>
               <label htmlFor="dateJoined"></label>
             </div>
+          <button type="submit" className="btn btn-primary user-button">
+          Update
+          </button>
           </>
         )}
-        <button type="submit" className="btn btn-primary user-button">
-          Update
-        </button>
         {message ? <h3>{message}</h3> : ""}
       </form>
     </>

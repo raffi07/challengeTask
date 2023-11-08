@@ -62,14 +62,6 @@ UserSchema.methods.getSignedJwtToken = function () {
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
-
-// Define a virtual property for populating reviews
-UserSchema.virtual("populatedReviews", {
-  ref: "Review",
-  localField: "_id",
-  foreignField: "review",
-  justOne: false,
-});
 // Define a virtual property for populating address
 UserSchema.virtual("populatedAddress", {
   ref: "ShippingAddress",

@@ -57,6 +57,9 @@ const UserPage = () => {
 
   return (
     <div className="columns">
+      <div className="left-column">
+        {loading ? <p>Loading...</p> : <UserPhoto userData={userData} />}{" "}
+      </div>
       <div>
         {loading ? <p>Loading...</p> : <UserProfile userData={userData} />}
       </div>

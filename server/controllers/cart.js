@@ -4,6 +4,7 @@ const UnauthorizedUser = require("../models/UnauthorizedUser.js") ;
 const Book = require("../models/Book.js") ;
 const ErrorResponse = require("../utils/errorResponse.js") ;
 const asyncHandler = require("../middleware/async.js") ;
+const {updateUnauthorizedUser} = require("./unauthorizedUser");
 
 const getCart = asyncHandler(async (req, res, next) => {
     try{
@@ -92,8 +93,29 @@ const deleteCart = asyncHandler(async (req, res, next) => {
     res.status(200).json({});
 });
 
+const updateCheckoutInformation = asyncHandler(async (req, res, next) => {
+    try {
+        const unauthorizedUser = await UnauthorizedUser.findByIdAndUpdate(req.cookies.sessionKey, req.body);
+
+        if (!unauthorizedUser) {
+            return next(new ErrorResponse(`No authenticated user with this exists`, 404));
+        }
+
+        await unauthorizedUser.save();
+
+        console.log(unauthorizedUser);
+
+        res.status(200).json({ success: true, data: unauthorizedUser, msg: `Checkout information is updated` });
+    } catch (e) {
+        console.log(e);
+    }
+
+
+})
+
 module.exports = {
     getCart,
     createOrUpdateCart,
     deleteCart,
+    updateCheckoutInformation
 };

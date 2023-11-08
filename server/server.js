@@ -40,7 +40,6 @@ app.get('/api/v1', async (req, res) => {
   try {
     const unauthorizedUser = await createUnauthorizedUser(sessionToken);
     console.log("Created unauthorized user with id: ", sessionToken);
-    //TODO: save unauthorized User correctly
     await unauthorizedUser.save();
   } catch (e) {
     console.log("Not able to create unauthorized user: ", e);
