@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import styles from '../styles/cart.module.css';
+import {checkNumberInput, checkTextInput} from "@/helpers/checkFormInput";
 
 const cartCheckout = () => {
 
@@ -52,7 +53,6 @@ const cartCheckout = () => {
           console.log(error);
       }
   };
-
     if(!success) {
         return (
             <form data-test="" className={styles.stickyForm} onSubmit={handleSubmit}>
@@ -64,7 +64,10 @@ const cartCheckout = () => {
                         id="firstName"
                         name="firstName"
                         value={firstName}
-                        onChange={(event) => setFirstName(event.target.value)}
+                        onChange={(event) => {
+                            const sanitizedText = checkTextInput(event.target.value)
+                            setFirstName(sanitizedText)
+                        }}
                     />
                 </div>
                 <div className={styles.checkoutDiv}>
@@ -74,7 +77,10 @@ const cartCheckout = () => {
                         id="lastName"
                         name="lastName"
                         value={lastName}
-                        onChange={(event) => setLastName(event.target.value)}
+                        onChange={(event) => {
+                            const sanitizedText = checkTextInput(event.target.value)
+                            setLastName(sanitizedText)
+                        }}
                     />
                 </div>
 
@@ -85,7 +91,10 @@ const cartCheckout = () => {
                         id="address"
                         name="address"
                         value={address}
-                        onChange={(event) => setAddress(event.target.value)}
+                        onChange={(event) => {
+                            const sanitizedText = checkTextInput(event.target.value)
+                            setAddress(sanitizedText)
+                        }}
                     />
                 </div>
 
@@ -96,7 +105,10 @@ const cartCheckout = () => {
                         id="city"
                         name="city"
                         value={city}
-                        onChange={(event) => setCity(event.target.value)}
+                        onChange={(event) => {
+                            const sanitizedText = checkTextInput(event.target.value);
+                            setCity(sanitizedText)
+                        }}
                     />
                 </div>
 
@@ -107,18 +119,24 @@ const cartCheckout = () => {
                         id="state"
                         name="state"
                         value={state}
-                        onChange={(event) => setState(event.target.value)}
+                        onChange={(event) => {
+                            const sanitizedText = checkTextInput(event.target.value);
+                            setState(sanitizedText);
+                        }}
                     />
                 </div>
 
                 <div className={styles.checkoutDiv}>
                     <label htmlFor="zipCode">Zip Code: </label>
                     <input
-                        type="text"
+                        type="number"
                         id="zipCode"
                         name="zipCode"
                         value={zipCode}
-                        onChange={(event) => setZipCode(event.target.value)}
+                        onChange={(event) => {
+                            const sanitizedNumber = checkNumberInput(event.target.value, 4, 5);
+                            setZipCode(sanitizedNumber);
+                        }}
                     />
                 </div>
 
@@ -126,18 +144,21 @@ const cartCheckout = () => {
                 <div className={styles.checkoutDiv}>
                     <label htmlFor="cardNumber">Card number: </label>
                     <input
-                        type="text"
+                        type="number"
                         id="cardNumber"
                         name="cardNumber"
                         value={cardNumber}
-                        onChange={(event) => setCardNumber(event.target.value)}
+                        onChange={(event) => {
+                            const sanitizedNumber = checkNumberInput(event.target.value, 16, 19);
+                            setCardNumber(sanitizedNumber);
+                        }}
                     />
                 </div>
 
                 <div className={styles.checkoutDiv}>
                     <label htmlFor="cardExpiration">Card expiration: </label>
                     <input
-                        type="text"
+                        type="date"
                         id="cardExpiration"
                         name="cardExpiration"
                         value={cardExpiration}
@@ -148,11 +169,14 @@ const cartCheckout = () => {
                 <div className={styles.checkoutDiv}>
                     <label htmlFor="cardCVV">CVV:</label>
                     <input
-                        type="text"
+                        type="number"
                         id="cardCVV"
                         name="cardCVV"
                         value={cardCVV}
-                        onChange={(event) => setCardCVV(event.target.value)}
+                        onChange={(event) => {
+                            const sanitizedNumber = checkNumberInput(event.target.value, 3, 3);
+                            setCardCVV(sanitizedNumber)
+                        }}
                     />
                 </div>
                 <button type="submit" onClick={handleSubmit}>Submit</button>
