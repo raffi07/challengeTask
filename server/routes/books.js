@@ -24,7 +24,12 @@ const { protect, authorize } = require("../middleware/auth.js");
 router
   .route("/")
   .get(getBooks)
-  .post(protect, authorize("admin"), createBook);
+  // .post(protect, authorize("admin"), createBook);
+
+router
+  .route("/create")
+  .post(protect,authorize("admin"),
+    createBook);
 
 router
   .route("/search")

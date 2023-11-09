@@ -27,13 +27,25 @@ const getBook = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: book });
 });
 // @desc create books
-// @route CREATE /api/v1/books
-// @access Private
+// @route CREATE /api/v1/books/create
+// @access Public
 const createBook = asyncHandler(async (req, res, next) => {
-  const book = await Book.create(req.body);
+  const { title, author, publisher, price } = req.body;
 
-  if (req.user.role !== "admin") {
-    return next(new ErrorResponse(`The logged in user doesn't not have permissions`, 400));
+  // if (req.user.role !== "admin") {
+  //   return next(new ErrorResponse(`The logged in user doesn't not have permissions`, 400));
+  // }
+
+  try {
+     book = await Book.create({
+      title,
+      author,
+      publisher,
+      price
+    });
+  }catch(e){
+    console.log(e);
+    return next(new ErrorResponse ("Book already exists", 409))
   }
 
   res.status(201).json({ success: true, data: book, msg: "create a book" });

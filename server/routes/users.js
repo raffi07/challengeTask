@@ -1,7 +1,7 @@
 const express = require("express");
 const Review = require("../models/Review.js");
 const { getUser, getUsers, updateUser, deleteUser } = require("../controllers/users.js");
-const advancedResults = require("../middleware/advancedResults.js");
+// const advancedResults = require("../middleware/advancedResults.js");
 
 const router = express.Router();
 
@@ -12,9 +12,9 @@ router
   .get(
     protect,
     authorize("user", "admin"),
-    advancedResults(Review
+    // advancedResults(Review
       // , { path: "reviews", select: "book title recommend review stars" }
-      ),
+      // ),
     getUsers
   );
 

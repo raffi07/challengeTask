@@ -1,3 +1,4 @@
+"use client";
 import React, {useState} from "react";
 import styles from '../styles/cart.module.css';
 
@@ -12,11 +13,57 @@ const bookCreation = () => {
     const [author, setAuthor] = useState("")
     const [publisher, setPublisher] = useState("")
     const [price, setPrice] = useState("")
+    const [message, setMessage] = useState("")
 
 
-  const handleSubmit = (event) => {
-    // TODO: handle form submission logic here
-  };
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  const apiUrl =
+                process.env.NEXT_PUBLIC_NODE_ENV === "production"
+                    ? "https://next-danube-webshop-backend.vercel.app/api/v1"
+                    : "http://localhost:3000/api/v1";
+
+  try {
+    const response = await fetch(`${apiUrl}/books/create`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: title,
+        author: author,
+        publisher: publisher,
+        price: price
+      }),
+    });
+    if (!response.ok) {
+      console.log(`\nThis is the response status \n ${response.status}`)
+      if (response.status === 409){
+        setMessage("This book already exists")
+      }
+      throw new Error("Unable to create book");
+    }
+    const data = await response.json(); // extract data from response
+    console.log(data, "data");
+    setMessage("Book creation successful"); // set message state variable
+  } catch (error) {
+    console.error(error);
+    setMessage(error.message);
+    setTimeout(() => {
+      setMessage("An error has occured");
+    }, 5000);
+  }
+
+  // do something with form data, like send it to a server
+  console.log("Book created:", { title, author, publisher, price });
+
+  // clear form fields
+  setTitle("");
+  setAuthor("");
+  setPublisher("");
+  setPrice("");
+};
 
   return (
     <form data-test="" className={styles.stickyForm} onSubmit={handleSubmit}>
@@ -64,6 +111,9 @@ const bookCreation = () => {
         />
       </div>
       <button type="submit">Submit</button>
+      <div>
+        {message}
+      </div>
     </form>
   );
 };

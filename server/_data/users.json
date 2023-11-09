@@ -108,6 +108,16 @@
     "image": "https://example.com/images/lucio.jpg",
     "createdAt": "2021-10-09T10:15:47.601Z",
     "reviews": []
+  },
+  {
+    "email": "admin@adminc.ch",
+    "password": "passwordadmin11",
+    "username": "adminitus",
+    "lastName": "admonius",
+    "role": "admin",
+    "image": "https://example.com/images/lucio.jpg",
+    "createdAt": "2021-10-09T10:15:47.601Z",
+    "reviews": []
   }
 ]
 
