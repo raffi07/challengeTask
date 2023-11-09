@@ -2,18 +2,24 @@ import React, { useState } from "react";
 
 const UserProfile = ({ userData }) => {
   const [formValues, setFormValues] = useState({
-    username: "",
-    email: "",
+    username: userData.data.username,
+    email: userData.data.email,
   });
 
   const [message, setMessage] = useState("");
+  const [disabled, setDisabled] = useState(true);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
+    setDisabled(false);
   };
 
   const handleSubmit = async (event) => {
+    if(formValues.username === userData.username && formValues.email === userData.email){
+      console.log("UPDATE NOT NEEDED");
+      return;
+    }
     event.preventDefault();
     try {
       const getCookie = (name) => {
@@ -22,12 +28,7 @@ const UserProfile = ({ userData }) => {
         if (parts.length === 2) return parts.pop().split(";").shift();
       };
       const token = getCookie("token");
-      const { id, email } = userData.data;
-
-      console.log(token, "token");
-      console.log(id, "id");
-      console.log(email, "email");
-      console.log(formValues, "formValues");
+      const { id } = userData.data;
 
       const response = await fetch(
         `http://localhost:3000/api/v1/users/${id}`,
@@ -37,7 +38,7 @@ const UserProfile = ({ userData }) => {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...formValues, email }), // Include email in request body
+          body: JSON.stringify({ ...formValues }),
         }
       );
 
@@ -47,6 +48,7 @@ const UserProfile = ({ userData }) => {
       setTimeout(() => {
         setMessage("");
       }, 5000);
+      setDisabled(true);
     } catch (error) {
       console.error("There was a problem updating the user profile", error);
       setMessage("Something went wrong");
@@ -71,7 +73,7 @@ const UserProfile = ({ userData }) => {
                 id="username"
                 name="username"
                 value={formValues.username || userData.data.username}
-                onChange={handleInputChange}
+                onChange={(event) => handleInputChange(event)}
               />
             </div>
             <div className="form-group">
@@ -82,14 +84,14 @@ const UserProfile = ({ userData }) => {
                 id="email"
                 name="email"
                 value={formValues.email || userData.data.email}
-                onChange={handleInputChange}
+                onChange={(event) => handleInputChange(event)}
               />
             </div>
             <div className="form-group">
               <p>Date Joined: {userData.data.createdAt}</p>
               <label htmlFor="dateJoined"></label>
             </div>
-          <button type="submit" className="btn btn-primary user-button">
+          <button type="submit" className="btn btn-primary user-button" disabled={disabled}>
           Update
           </button>
           </>
