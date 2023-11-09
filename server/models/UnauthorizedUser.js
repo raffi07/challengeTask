@@ -2,14 +2,14 @@
 const mongoose = require("mongoose");
 const ShippingAddress = require("./ShippingAddress").schema;
 const PaymentMethod = require("./PaymentMethod").schema;
+const { v4: uuidv4 } = require("uuid");
 
 
 const UnauthorizedUserSchema = new mongoose.Schema(
     {
         _id: {
             type: String,
-            required: [true],
-            unique: true
+            required: [true]
         },
         cartId: {type: String},
         shippingAddress:{ type: ShippingAddress, ref: "ShippingAddress"},

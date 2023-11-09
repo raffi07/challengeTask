@@ -5,6 +5,9 @@ version: "3.8"
 services:
   # name is optional for our mongodb
   mymongodb:
+
+    container_name: mymongodb
+
     # since mongo is an offical image we can use it.
     image: "mongo"
 
@@ -23,6 +26,9 @@ services:
 
   # name is optional for our backend
   backend:
+
+    container_name: backend
+    
     # to build an image based on Dockerfile
     # it looks in this folder to find Dockerfile to build an image
     build: ./server
@@ -30,12 +36,18 @@ services:
     ports:
       - "8080:8080"
 
+    # volumes:
+    #   - /server:/server
+
     # depends_on means it will start our backend container once mongo-container is  up and running.
     depends_on:
       - mymongodb
 
   # name is optional for our frontend
   frontend:
+
+    container_name: frontend
+
     # to build an image based on Dockerfile
     # it looks in this folder to find Dockerfile to build an image
     build: ./next-webstore
