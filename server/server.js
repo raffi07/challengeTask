@@ -64,6 +64,11 @@ const books = require("./routes/books");
 const users = require("./routes/users");
 const auth = require("./routes/auth");
 const cart = require("./routes/cart")
+const rateLimitMiddleware = require("./middleware/rateLimiter");
+
+
+//limit API calls per minute
+app.use(rateLimitMiddleware);
 
 app.use("/api/v1/books", books);
 app.use("/api/v1/users", users);
