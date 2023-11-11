@@ -87,9 +87,19 @@ const getMe = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc Check if user is admin
+// @route POST /api/v1/auth/admin
+// @access Public
+const isAdmin = asyncHandler(async (req, res, next) => {
+  res.status(200).json({
+    success: true
+  });
+});
+
 
 module.exports = {
   getMe,
   login,
-  register
+  register,
+  isAdmin
 };
