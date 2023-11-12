@@ -110,13 +110,14 @@
     "reviews": []
   },
   {
-    "email": "admin@adminc.ch",
-    "password": "passwordadmin11",
-    "username": "adminitus",
-    "lastName": "admonius",
+    "_id": "d3d1596f-15b8-4021-95e6-e15321e8fad4",
+    "email": "a@a.com",
+    "password": "adminpassword11",
+    "username": "Alphonse",
+    "lastName": "Admin",
     "role": "admin",
-    "image": "https://example.com/images/lucio.jpg",
-    "createdAt": "2021-10-09T10:15:47.601Z",
+    "image": "https://example.com/images/admin.jpg",
+    "createdAt": "2023-10-09T10:15:47.601Z",
     "reviews": []
   }
 ]
