@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ const LoginForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState(""); // added state variable
   const [success, setSuccess] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -143,6 +145,8 @@ const LoginForm = () => {
         </div>
     );
   }else{
+    setIsLogin(!isLogin)
+    router.push("/")
     return(
         <div>
           <h2 style={{color: "blue"}}>

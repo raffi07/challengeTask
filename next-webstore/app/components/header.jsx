@@ -5,6 +5,7 @@ import Link from "next/link";
 const header = () => {
 
     const [isAdmin, setIsAdmin] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] = useState(null);
   
     useEffect(() => {
       const fetchData = async () => {
@@ -21,6 +22,10 @@ const header = () => {
             if (parts.length === 2) return parts.pop().split(";").shift();
           };
           const token = getCookie("token");
+
+          if (token){
+            setIsLoggedIn(true)
+          };
   
           // Fetch user data with token in headers
           const response = await fetch(`${apiUrl}/auth/admin`, {
@@ -49,9 +54,9 @@ const header = () => {
         </Link>
       </div>
       <div className="links">
-        <Link href="/login">login</Link>
+        {!isLoggedIn ? <Link href="/login">login</Link> : null}
         <Link href="/cart">cart</Link>
-        <Link href="/user">account</Link>
+        {isLoggedIn ? <Link href="/user">account</Link> : null}
         {isAdmin ? <Link href="/bookHandling">books admin</Link> : null}
       </div>
     </header>
