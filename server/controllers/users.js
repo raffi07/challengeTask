@@ -50,8 +50,6 @@ const deleteUser = asyncHandler(async (req, res, next) => {
 
   const user = await User.findOne({ _id: req.params.id });
 
-  console.log(user, "user");
-
   if (!user) {
     return next(new ErrorResponse(`User not found with id of ${req.params.id}`, 404));
   }

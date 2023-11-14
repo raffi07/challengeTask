@@ -23,8 +23,6 @@ const register = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse ("Something went wrong when creating the user.", 400))
   }
 
-  console.log("User: ",user);
-
   sendTokenResponse(user, 200, res);
 });
 

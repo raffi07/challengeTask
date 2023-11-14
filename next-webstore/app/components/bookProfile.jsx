@@ -64,8 +64,6 @@ const bookProfile = ({ author, title, publisher, id , price}) => {
                     },
                 }
             );
-            const data = await response.json();
-            console.log('Cart: ',data);
             setSuccess(true);
         } catch (error) {
             console.log(error);
@@ -113,7 +111,6 @@ const bookProfile = ({ author, title, publisher, id , price}) => {
                         </>
                         )
                     }
-
                 </form>
             </div>
         </div>

@@ -1,10 +1,8 @@
 const Cart = require("../models/Cart.js") ;
-const User = require("../models/User.js") ;
 const UnauthorizedUser = require("../models/UnauthorizedUser.js") ;
 const Book = require("../models/Book.js") ;
 const ErrorResponse = require("../utils/errorResponse.js") ;
 const asyncHandler = require("../middleware/async.js") ;
-const {updateUnauthorizedUser} = require("./unauthorizedUser");
 
 const getCart = asyncHandler(async (req, res, next) => {
     try{
@@ -12,10 +10,8 @@ const getCart = asyncHandler(async (req, res, next) => {
     if (!unauthorizedUser) {
         return next(new ErrorResponse(`UnauthorizedUser not found with id of ${req.user._id}`, 404));
     }
-        //TODO: return books with author, title etc.
     if(unauthorizedUser.cartId !== null) {
         const cart = await Cart.findById(unauthorizedUser.cartId);
-        console.log("Cart: ", cart);
         res.status(200).json({ success: true, data: cart });
     }
     }catch (e){
@@ -55,7 +51,6 @@ const createOrUpdateCart = asyncHandler(async (req, res, next) => {
     } else {
         // Add the book to the cart
         const existingCartItem = cart.books.find((item) => item.bookId === book._id);
-        console.log("Existing CartItem: ", existingCartItem);
         if (existingCartItem) {
             // If the book is already in the cart, update the quantity
             existingCartItem.quantity += 1;
@@ -73,7 +68,6 @@ const createOrUpdateCart = asyncHandler(async (req, res, next) => {
     if(unauthorizedUser){
         unauthorizedUser.cartId = cart._id;
         await unauthorizedUser.save();
-        console.log("updated unauth user: ", unauthorizedUser);
     }
 
     res
@@ -102,8 +96,6 @@ const updateCheckoutInformation = asyncHandler(async (req, res, next) => {
         }
 
         await unauthorizedUser.save();
-
-        console.log(unauthorizedUser);
 
         res.status(200).json({ success: true, data: unauthorizedUser, msg: `Checkout information is updated` });
     } catch (e) {

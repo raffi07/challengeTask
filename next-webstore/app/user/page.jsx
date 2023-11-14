@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import UserPhoto from "../components/userPhoto";
 import UserProfile from "../components/userProfile";
 
 const UserPage = () => {
@@ -36,7 +35,6 @@ const UserPage = () => {
           const data = await response.json();
           setUserMessage("success");
           setUserData(data);
-          console.log(data);
         } else {
           setUserMessage("failed");
           console.error(error, "error");
@@ -57,9 +55,6 @@ const UserPage = () => {
 
   return (
     <div className="columns">
-      <div className="left-column">
-        {loading ? <p>Loading...</p> : <UserPhoto userData={userData} />}{" "}
-      </div>
       <div>
         {loading ? <p>Loading...</p> : <UserProfile userData={userData} />}
       </div>

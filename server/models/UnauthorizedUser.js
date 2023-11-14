@@ -2,8 +2,6 @@
 const mongoose = require("mongoose");
 const ShippingAddress = require("./ShippingAddress").schema;
 const PaymentMethod = require("./PaymentMethod").schema;
-const { v4: uuidv4 } = require("uuid");
-
 
 const UnauthorizedUserSchema = new mongoose.Schema(
     {

@@ -16,7 +16,9 @@ const cartCheckout = () => {
     const [success, setSuccess] = useState(false)
 
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+      event.preventDefault();
+
       const apiUrl =
           process.env.NEXT_PUBLIC_NODE_ENV === "production"
               ? "https://next-danube-webshop-backend.vercel.app/api/v1"
@@ -29,16 +31,16 @@ const cartCheckout = () => {
                   method: "PUT",
                   body: JSON.stringify(
                       {shippingAddress: {
-                          firstName: firstName,
-                          lastName: lastName,
-                          address: address,
-                          city: city,
-                          state: state,
-                          zipCode: zipCode
+                           firstName,
+                           lastName,
+                           address,
+                           city,
+                           state,
+                           zipCode
                       }, paymentMethod: {
-                          cardNumber: cardNumber,
-                          cardExpiration: cardExpiration,
-                          cvv: cardCVV
+                           cardNumber,
+                           cardExpiration,
+                           cardCVV
                           }}),
                   headers: {
                       "Content-Type": "application/json",
@@ -53,8 +55,9 @@ const cartCheckout = () => {
           console.log(error);
       }
   };
-    if(!success) {
         return (
+            <>
+            {!success ? (
             <form data-test="" className={styles.stickyForm} onSubmit={handleSubmit}>
                 <h2>Shipping</h2>
                 <div className={styles.checkoutDiv}>
@@ -179,14 +182,12 @@ const cartCheckout = () => {
                         }}
                     />
                 </div>
-                <button type="submit" onClick={handleSubmit}>Submit</button>
+                <button type="submit" onClick={e => handleSubmit(e)}>Submit</button>
             </form>
-        );
-    }else{
-        return (
-            <h2>Thank you for inserting the shipping details</h2>
+                ) :
+                    (<h2>Thank you for inserting the shipping details</h2>)}
+            </>
         )
-    }
 };
 
 export default cartCheckout;

@@ -34,6 +34,8 @@ const corsOptions = {
 const app = express();
 app.get('/api/v1', async (req, res) => {
   const sessionToken = session.generateSessionToken();
+  //expires in 2 hours
+  const expiratonTime = 2 * 60 * 60;
 
   // Set the session token as a cookie in the response
   res.cookie('sessionKey', sessionToken);
@@ -45,7 +47,7 @@ app.get('/api/v1', async (req, res) => {
     console.log("Not able to create unauthorized user: ", e);
   }
 
-  res.status(200).json({success: true, token: sessionToken});
+  res.status(200).json({success: true, token: sessionToken, expiresIn: expiratonTime});
 });
 
 app.use(cors(corsOptions));
@@ -60,7 +62,6 @@ const NODE_ENV = process.env.NODE_ENV || "development";
 
 
 const books = require("./routes/books");
-// const reviews = require("./routes/reviews");
 const users = require("./routes/users");
 const auth = require("./routes/auth");
 const cart = require("./routes/cart")

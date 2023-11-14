@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import {checkTextInput} from "@/helpers/checkFormInput";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -54,31 +55,36 @@ const LoginForm = () => {
         }, 5000);
       }
     } else {
-      try {
-        const response = await fetch(`${apiUrl}/auth/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-            username: username,
-            password: password,
-          }),
-        });
-        if (!response.ok) {
-          throw new Error("Unable to create account");
+      if (password === passwordConfirm) {
+        try {
+          const response = await fetch(`${apiUrl}/auth/register`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: email,
+              username: username,
+              password: password,
+            }),
+          });
+          if (!response.ok) {
+            throw new Error("Unable to create account");
+          }
+          const data = await response.json(); // extract data from response
+          console.log(data, "data");
+          setMessage("Account creation successful"); // set message state variable
+          setSuccess(true);
+        } catch (error) {
+          console.error(error);
+          setMessage(error.message);
+          setTimeout(() => {
+            setMessage("");
+          }, 5000);
         }
-        const data = await response.json(); // extract data from response
-        console.log(data, "data");
-        setMessage("Account creation successful"); // set message state variable
-        setSuccess(true);
-      } catch (error) {
-        console.error(error);
-        setMessage(error.message);
-        setTimeout(() => {
-          setMessage("");
-        }, 5000);
+      }else {
+        throw new Error("The passwords are not matching.")
+
       }
     }
   };
@@ -96,7 +102,10 @@ const LoginForm = () => {
             {!isLogin && (
                 <div>
                   <label>Username:</label>
-                  <input type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
+                  <input type="text" value={username} onChange={(e) => {
+                    const sanitizedText = checkTextInput(e.target.value);
+                    setUsername(sanitizedText)
+                  }}/>
                 </div>
             )}
             <div>
@@ -111,8 +120,7 @@ const LoginForm = () => {
                   <input
                       type="password"
                       value={passwordConfirm}
-                      onChange={(e) => setPasswordConfirm(e.target.value)}
-                  />
+                      onChange={(e) => setPasswordConfirm(e.target.value)}/>
                 </div>
             )}
             <div className="form">

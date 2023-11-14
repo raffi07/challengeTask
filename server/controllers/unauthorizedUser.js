@@ -51,13 +51,9 @@ const deleteUnauthorizedUser = asyncHandler(async (req, res, next) => {
 
     const user = await User.findOne({ _id: req.params.id });
 
-    console.log(user, "user");
-
     if (!user) {
         return next(new ErrorResponse(`User not found with id of ${req.params.id}`, 404));
     }
-
-    console.log(await user.deleteOne, "user.deleteOne"); //log the remove method
 
     await user.deleteOne();
 

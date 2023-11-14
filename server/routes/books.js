@@ -1,6 +1,5 @@
 //@ts-nocheck
 const express = require("express");
-const Book = require("../models/Book.js");
 const {
   getBook,
   getBooks,
@@ -11,13 +10,8 @@ const {
 } = require("../controllers/books.js");
 // const advancedResults = require("../middleware/advancedResults.js");
 
-// Include other resource routers
-// const reviewRouter = require("./reviews.js");
 
 const router = express.Router();
-
-// Re-route into other resource routers
-// router.use("/:bookId/reviews", reviewRouter);
 
 const { protect, authorize } = require("../middleware/auth.js");
 

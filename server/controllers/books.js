@@ -17,10 +17,8 @@ const getBooks = asyncHandler(async (req, res, next) => {
 // @route GET /api/v1/books/:id
 // @access Public
 const getBook = asyncHandler(async (req, res, next) => {
-  console.log(req.params.id);
-
   const book = await Book.findById(req.params.id);
-  console.log(await book, "book");
+
   if (!book) {
     return next(new ErrorResponse(`Book not found with id of ${req.params.id}`, 404));
   }
@@ -77,13 +75,9 @@ const deleteBook = asyncHandler(async (req, res, next) => {
   // const book = await Book.findById(req.params.id);
   const book = await Book.findOne({ _id: req.params.id });
 
-  console.log(book, "book");
-
   if (!book) {
     return next(new ErrorResponse(`Book not found with id of ${req.params.id}`, 404));
   }
-
-  console.log(await book.deleteOne, "book.deleteOne"); //log the remove method
 
   await book.deleteOne();
 

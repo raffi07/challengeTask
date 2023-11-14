@@ -1,8 +1,5 @@
 //@ts-nocheck
 const fs = require("fs")
-const mongoose = require("mongoose")
-const colors = require("colors")
-const dotenv = require("dotenv")
 
 // Load env vars
 require('dotenv').config({ path: "./config/config.env" });
@@ -11,7 +8,6 @@ require('dotenv').config({ path: "./config/config.env" });
 const Book = require("./models/Book.js")
 const User = require("./models/User.js")
 const UnauthorizedUser = require("./models/UnauthorizedUser.js")
-const Cart = require("./models/Cart.js")
 const connectDB = require("./config/db");
 
 // Read JSON files
