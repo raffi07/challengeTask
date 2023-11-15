@@ -23,7 +23,7 @@ const importData = async () => {
     await Book.create(books);
     await User.create(users);
 
-    console.log("Data imported...".blue.inverse);
+    console.log("Data imported...");
     process.exit();
   } catch (err) {
     console.log(err);
@@ -41,7 +41,7 @@ const deleteData = async () => {
     //delete all session users
     await UnauthorizedUser.deleteMany();
 
-    console.log("Data destroyed...".red.inverse);
+    console.log("Data destroyed...");
     process.exit();
   } catch (err) {
     console.log(err);
